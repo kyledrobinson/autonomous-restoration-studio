@@ -1,0 +1,14 @@
+Source:
+Library of Congress – Les roses (Plate 43)
+
+LoC Item Page:
+https://www.loc.gov/resource/rbctos.2018rosen1892v1/?sp=43
+
+IIIF Image URL:
+https://tile.loc.gov/image-services/iiif/service:rbc:rbctos:2018rosen1892v1:0043/full/pct:50/0/default.jpg
+
+Rights:
+Public Domain
+
+Notes:
+Downloaded via LoC IIIF service. Resolution scaled to pct:50 for prototyping.
