@@ -8,7 +8,9 @@ import json
 
 from src.agents.ingest import run_ingest
 from src.agents.segment import run_segment
+from src.agents.background_clean import run_background_clean
 from src.state import RestorationState
+
 
 
 
@@ -58,7 +60,10 @@ def main() -> int:
     # --- Segmentation Agent ---
     state = run_segment(state, copied_input)
 
-    # Write updated state (after both steps)
+    # --- Background Cleanup Agent ---
+    state = run_background_clean(state, copied_input)
+
+    # Write updated state (after all steps)
     state.write_json(state_path)
 
     write_text(work_dir / "README.txt", "Run folder created. Restoration steps will be added in later phases.\n")
