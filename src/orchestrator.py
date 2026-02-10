@@ -7,7 +7,9 @@ import hashlib
 import json
 
 from src.agents.ingest import run_ingest
+from src.agents.segment import run_segment
 from src.state import RestorationState
+
 
 
 def sha256_file(path: Path) -> str:
@@ -53,9 +55,11 @@ def main() -> int:
     # --- Ingest / Preprocess Agent ---
     state = run_ingest(state, copied_input)
 
-    # Write updated state (includes damage_map_path)
-    state.write_json(state_path)
+    # --- Segmentation Agent ---
+    state = run_segment(state, copied_input)
 
+    # Write updated state (after both steps)
+    state.write_json(state_path)
 
     write_text(work_dir / "README.txt", "Run folder created. Restoration steps will be added in later phases.\n")
     write_text(
@@ -67,7 +71,7 @@ def main() -> int:
                 "input": str(input_path),
                 "input_sha256": state.input_sha256,
                 "status": state.status,
-                "note": "Phase 1 scaffold: ingest + preprocess + state manifest.",
+                "note": "Phase 1 scaffold: ingest + preprocess + segmentation.",
             },
             indent=2,
         ),
@@ -77,8 +81,11 @@ def main() -> int:
     print(f"[OK] Copied input: {copied_input}")
     print(f"[OK] Wrote state: {state_path}")
     print(f"[OK] Wrote report: {work_dir / 'report.json'}")
+    print(f"[OK] Wrote preprocess: {Path(state.work_dir) / 'preprocess'}")
+    print(f"[OK] Wrote segment: {Path(state.work_dir) / 'segment'}")
     return 0
 
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
