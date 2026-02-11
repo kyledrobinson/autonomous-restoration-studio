@@ -8,6 +8,7 @@ import json
 
 from src.agents.ingest import run_ingest
 from src.agents.segment import run_segment
+#from src.agents.border_fix import run_border_fix
 from src.agents.background_clean import run_background_clean
 from src.state import RestorationState
 
@@ -62,6 +63,35 @@ def main() -> int:
 
     # --- Background Cleanup Agent ---
     state = run_background_clean(state, copied_input)
+
+        # --- Border Fix Agent ---
+    # Use the cleaned image as the base if it exists
+    #cleaned_path = work_dir / "restore" / "background_clean.png"
+    #base_for_border = cleaned_path if cleaned_path.exists() else copied_input
+
+    #state = run_border_fix(
+        #state,
+        #base_for_border,
+        #mode="fill",          # or "crop"
+        #fill_hex="f2eee4",
+        #border_pct=0.06,      # 6% border band replaced
+        #crop_pct=0.04,        # only used for mode="crop"
+    #)
+
+    # --- Border Fix Agent ---
+    cleaned_path = work_dir / "restore" / "background_clean.png"
+    base_for_border = cleaned_path if cleaned_path.exists() else copied_input
+
+    state = run_border_fix(
+        state,
+        base_for_border,
+        mode="fill",
+        fill_hex="f2eee4",
+        border_pct=0.06,
+        crop_pct=0.04,
+    )
+
+
 
     # Write updated state (after all steps)
     state.write_json(state_path)
